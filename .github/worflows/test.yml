@@ -1,6 +1,8 @@
-name: CI Pipeline
+name: test
 
 on:
+  push:
+    - main
   pull_request:
     branches:
       - main
@@ -8,6 +10,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+  container:
+    image: python:3.12
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
