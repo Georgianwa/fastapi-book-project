@@ -13,21 +13,12 @@ jobs:
     runs-on: ubuntu-latest
   container:
     image: python:3.12
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: pip install --upgrade pip
-        run: pip install -r requirements.txt
-
-      - name: Debug Python packages
-        run: pip list
-
-      - name: Run tests
-        run: pytest
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+    - run: pip install --upgrade pip
+    - run: pip install -r requirements.txt
+    - run: pip list
+    - run: pytest
