@@ -29,4 +29,5 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh georgia_u_nwa@35.188.111.233 "cd /path/to/app && git pull origin main && systemctl restart fastapi-app"
+          ssh georgia_u_nwa@35.188.111.233 "cd /home/georgia_u_nwa/fastapi-book-project
+ && git pull origin main && systemctl restart fastapi-app"
