@@ -9,24 +9,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Setup SSH Key
+      - name: Build, tag, and push docker image
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 35.188.111.233 >> ~/.ssh/known_hosts
-
-      - name: Deploy to Server
-        run: |
-          ssh georgia_u_nwa@35.188.111.233 "cd /home/georgia_u_nwa/fastapi-book-project && git pull origin main && systemctl restart fastapi-app"
+          docker build -t fastapi-app .
+          docker tag fastapi-app "${{ secrets.DOCKER_USERNAME }}/fastapi-app"
+          docker push "${{ secrets.DOCKER_USERNAME }}/fastapi-app"
+        
