@@ -30,7 +30,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          printf '%b' "$SSH_PRIVATE_KEY" | tr -d '\r'> private_key.pem
+          echo -e "$SSH_PRIVATE_KEY" | tr -d '\r'> private_key.pem
           cat private_key.pem
           chmod 600 private_key.pem
           ssh -i private_key.pem -o StrictHostKeyChecking=no georgia_u_nwa@34.69.88.137 << EOF
