@@ -86,8 +86,7 @@ jobs:
             echo "🚀 Starting new containers..."
             docker-compose up -d --build
 
-            echo "🔄 Restarting NGINX..."
-            sudo systemctl restart nginx
+            echo "✅ Deployment successful!"
           EOF
       - name: Clean Up
         run: rm -f private_key.pem
