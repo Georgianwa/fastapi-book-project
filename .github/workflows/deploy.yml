@@ -15,7 +15,6 @@ jobs:
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-
       - name: Build and tag Docker image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/fastapi:latest .
@@ -41,6 +40,7 @@ jobs:
 
       - name: Set up SSH Key
         run: |
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           echo -e "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
         
@@ -58,7 +58,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          echo -e "$SSH_PRIVATE_KEY" | tr -d '\r' > private_key.pem
+          echo -e "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
           ssh -i private_key.pem -o StrictHostKeyChecking=no georgia_u_nwa@34.69.88.137 << EOF
             
