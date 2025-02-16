@@ -37,6 +37,10 @@ jobs:
           echo "Key fingerprint:"
           ssh-keygen -lf private_key.pem
 
+      - name: Test SSH Login
+        run: |
+          ssh -i private_key.pem -o StrictHostKeyChecking=no georgia_u_nwa@34.69.88.137 "echo 'SSH connection successful'"
+
       - name: Deploy on Google Cloud
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
