@@ -39,6 +39,21 @@ jobs:
         run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no georgia_u_nwa@34.69.88.137 "echo 'SSH connection successful'"
 
+      - name: Set up SSH Key
+        run: |
+          echo -e "$SSH_PRIVATE_KEY" | tr -d '\r' > private_key.pem
+          chmod 600 private_key.pem
+        
+      - name: Install Docker & Docker Compose
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key.pem georgia_u_nwa@34.69.88.137 << 'EOF'
+            echo "📦 Installing Docker & Docker Compose..."
+            sudo apt-get update
+            sudo apt-get install -y docker.io docker-compose
+            sudo usermod -aG docker $(whoami)
+            sudo systemctl enable --now docker
+          EOF
+        
       - name: Deploy on Google Cloud
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -61,6 +76,7 @@ jobs:
             docker pull georgionrails/fastapi:latest
 
             echo "🛑 Stopping old containers..."
+            cd /home/georgia_u_nwa/fastapi-book-project
             docker-compose down
 
             echo "🧹 Cleaning up unused Docker images..."
@@ -72,6 +88,7 @@ jobs:
             echo "🔄 Restarting NGINX..."
             sudo systemctl restart nginx
           EOF
-          rm -f private_key.pem
+      - name: Clean Up
+        run: rm -f private_key.pem
       
         
