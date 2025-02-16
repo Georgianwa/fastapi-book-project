@@ -39,8 +39,9 @@ jobs:
           ssh -i private_key.pem -o StrictHostKeyChecking=no georgia_u_nwa@34.69.88.137 "echo 'SSH connection successful'"
 
       - name: Set up SSH Key
-        run: |
+        env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
           echo -e "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
         
